@@ -1,0 +1,33 @@
+{
+  "name": "monte-carlo-tree-search",
+  "version": "1.0.0",
+  "description": "A general purpose monte-carlo tree search AI in Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SethPipho/monte-carlo-tree-search-js.git"
+  },
+  "keywords": [
+    "monte",
+    "carlo",
+    "tree",
+    "search",
+    "ai",
+    "game"
+  ],
+  "author": "Seth Pipho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SethPipho/monte-carlo-tree-search-js/issues"
+  },
+  "homepage": "https://github.com/SethPipho/monte-carlo-tree-search-js#readme",
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "rollup": "^1.18.0"
+  }
+}
