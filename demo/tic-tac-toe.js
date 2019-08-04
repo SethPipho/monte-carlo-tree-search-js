@@ -93,49 +93,52 @@ console.log("Welcome to TIC-TAC-TOE")
 console.log("board layout:")
 console.log(gridLayout)
 
-let game = new TicTacToe()
 
-let randomAI = new RandomAI(game)
-let monteCarloAI = new MCTS(game)
+let draws = 0
+let mctsWins = 0
+let randomWins = 0
+let num_games = 1000
 
 
-let players;
-//randomize who goes first
-if (Math.random() < 0){
-    players = [randomAI, monteCarloAI]
-} else {
-    players = [monteCarloAI, randomAI]
-}
-
-while (!game.gameOver()){
-    const player = players[game.playerTurn() - 1]
-    const choice = player.selectMove()
-    game.playMove(choice)
-    console.log(game.toString())
-    break
-}
-
-/** 
-if (game.winner() == -1){
-    console.log("Draw")
-}
-
-if (game.winner() == 1){
-    console.log("X Won")
-    if (players[game.winner() - 1] instanceof RandomAI){
-        console.log("Random AI Won")
+for (let i = 0; i < num_games; i++){
+    console.log(i)
+    let game = new TicTacToe()
+    let players;
+    //randomize who goes first
+    if (Math.random() < .5){
+        players = [new RandomAI(game), new MCTS(game, 2)]
     } else {
-        console.log("Monte Carlo AI Won")
+        players = [new MCTS(game, 1), new RandomAI(game)]
+    }
+
+    //players = [new MCTS(game, 1), new MCTS(game,2)]
+
+    while (!game.gameOver()){
+        const player = players[game.playerTurn() - 1]
+        const choice = player.selectMove()
+        game.playMove(choice)
+        //console.log(game.toString())
+    }
+    
+    if (game.winner() == -1){
+       draws += 1
+    } else if (players[game.winner() - 1] instanceof RandomAI){
+      randomWins += 1
+    
+    } else {
+        mctsWins += 1
     }
 }
 
-if (game.winner() == 2){
-    console.log("O Won")
-    if (players[game.winner() - 1] instanceof RandomAI){
-        console.log("Random AI Won")
-    } else {
-        console.log("Monte Carlo AI Won")
-    }
-}
+console.log("Draws", draws)
+console.log("Random Wins", randomWins)
+console.log("MCTS wins", mctsWins)
+console.log("MCTS win + draw percentage:", (draws + mctsWins)/num_games)
 
-*/
+
+
+
+
+
+
+
