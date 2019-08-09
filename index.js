@@ -1,1 +1,2 @@
-export {add} from './src/add.js'
+import {MCTS} from './src/MCTS.js'
+export {MCTS}

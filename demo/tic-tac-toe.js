@@ -1,7 +1,6 @@
 const MCTS = require('../dist/mcts-js.build.js').MCTS
 
 class TicTacToe {
-    
     constructor(){
         this.state = {
             board:[0,0,0,0,0,0,0,0,0],
@@ -10,7 +9,6 @@ class TicTacToe {
             winner: -1,
             moves: 0
         }
-
         //list of all possible three in a row lines, each element corresponds to board index
         this.rows = [
             [0,1,2],
@@ -30,9 +28,20 @@ class TicTacToe {
     setState(state){
         this.state = state
     }
+    cloneState(){
+        return  {
+            board: this.state.board.slice(0),
+            playerTurn:this. state.playerTurn,
+            gameOver: this.state.gameOver,
+            winner: this.state.winner,
+            moves: this.state.moves
+        }
+    }
+
     playerTurn(){
         return this.state.playerTurn
     } 
+
     moves(){
         return this.state.board.reduce((empty, d, i) => {
             if (d == 0){
@@ -41,11 +50,11 @@ class TicTacToe {
             return empty
         }, [])
     }
-
     playMove(move){
         this.state.board[move] = this.state.playerTurn
         this.state.playerTurn = (this.state.playerTurn == 1) ? 2 : 1 
         this.state.moves += 1
+        
         //check if any player has three in a row
         const board = this.state.board
         for (let row of this.rows){
@@ -97,7 +106,7 @@ console.log(gridLayout)
 let draws = 0
 let mctsWins = 0
 let randomWins = 0
-let num_games = 1000
+let num_games = 100
 
 
 for (let i = 0; i < num_games; i++){
@@ -124,10 +133,12 @@ for (let i = 0; i < num_games; i++){
        draws += 1
     } else if (players[game.winner() - 1] instanceof RandomAI){
       randomWins += 1
+      //break
     
     } else {
         mctsWins += 1
     }
+    
 }
 
 console.log("Draws", draws)
