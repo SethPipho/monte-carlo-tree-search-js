@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = global || self, factory(global.Axon = {}));
+    (global = global || self, factory(global.MCTS = {}));
 }(this, function (exports) { 'use strict';
 
     class MCTSNode {
@@ -16,9 +16,11 @@
 
 
     class MCTS {
-        constructor(game, player){
+        constructor(game, player, iterations, exploration){
             this.game = game;
             this.player = player;
+            this.iterations = iterations | 100;
+            this.exploration = exploration | 1.41;
         }
 
         selectMove(){
@@ -26,7 +28,7 @@
             const possibleMoves = this.game.moves();
             const root = new MCTSNode(possibleMoves, null);
 
-            for (let i = 0; i < 1000; i++){
+            for (let i = 0; i < this.iterations; i++){
                 this.game.setState(originalState);
                 const clonedState = this.game.cloneState();
                 this.game.setState(clonedState);
@@ -35,11 +37,11 @@
                 if (this.game.gameOver()){
                     if (this.game.winner() != this.player && this.game.winner() != -1){
                         selectedNode.parent.wins = Number.MIN_SAFE_INTEGER;
-                        //selectedNode.parent.visits = 0
                     }
                 }
                 let expandedNode = this.expandNode(selectedNode);
                 let winner = this.rollout(expandedNode);
+               
                 this.backprop(expandedNode, winner);
             }
 
@@ -63,7 +65,7 @@
         }
         selectNode(root){
 
-            const c = 1.41;
+            const c = this.exploration;
 
             while (root.numUnexpandedMoves == 0){
                 let maxUBC = -Infinity;

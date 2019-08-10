@@ -12,9 +12,11 @@ class MCTSNode {
 
 
 class MCTS {
-    constructor(game, player){
+    constructor(game, player, iterations, exploration){
         this.game = game
         this.player = player
+        this.iterations = iterations | 100
+        this.exploration = exploration | 1.41
     }
 
     selectMove(){
@@ -22,7 +24,7 @@ class MCTS {
         const possibleMoves = this.game.moves()
         const root = new MCTSNode(possibleMoves, null)
 
-        for (let i = 0; i < 1000; i++){
+        for (let i = 0; i < this.iterations; i++){
             this.game.setState(originalState)
             const clonedState = this.game.cloneState()
             this.game.setState(clonedState)
@@ -31,11 +33,12 @@ class MCTS {
             if (this.game.gameOver()){
                 if (this.game.winner() != this.player && this.game.winner() != -1){
                     selectedNode.parent.wins = Number.MIN_SAFE_INTEGER
-                    //selectedNode.parent.visits = 0
                 }
             }
             let expandedNode = this.expandNode(selectedNode)
             let winner = this.rollout(expandedNode)
+            let value;
+           
             this.backprop(expandedNode, winner)
         }
 
@@ -43,6 +46,7 @@ class MCTS {
         let maxIndex = -1
         for (let i in root.children){
             const child = root.children[i]
+            if (child == null) {continue}
             if (child.wins > maxWins){
                 maxWins = child.wins
                 maxIndex = i
@@ -59,7 +63,7 @@ class MCTS {
     }
     selectNode(root){
 
-        const c = 1.41
+        const c = this.exploration
 
         while (root.numUnexpandedMoves == 0){
             let maxUBC = -Infinity
