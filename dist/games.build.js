@@ -5,12 +5,15 @@
 }(this, function (exports) { 'use strict';
 
     class Connect4 {
-        constructor(){
-            this.width = 7;
-            this.height = 6;
+        constructor(width, height){
 
+            let _width = width | 7;
+            let _height = height | 6;
+            
             this.state = {
-                board: new Array(this.width * this.height).fill(0),
+                width: _width,
+                height: _height,
+                board: new Array(_width * _height).fill(0),
                 playerTurn: 1,
                 gameOver: false,
                 winner: -1,
@@ -29,6 +32,8 @@
 
         cloneState(){
             return  {
+                width:this.state.width,
+                height: this.state.height,
                 board: this.state.board.slice(0),
                 playerTurn:this. state.playerTurn,
                 gameOver: this.state.gameOver,
@@ -45,7 +50,7 @@
 
         moves(){
             let moves = [];
-            for (let i = 0; i < this.width; i++){
+            for (let i = 0; i < this.state.width; i++){
                 if (this.state.board[i] == 0){
                     moves.push(i);
                 }
@@ -55,8 +60,8 @@
         playMove(move){
             let board = this.state.board;
             let index;
-            for (let i = this.height - 1; i >= 0; i--){
-                index = i * this.width + move;
+            for (let i = this.state.height - 1; i >= 0; i--){
+                index = i * this.state.width + move;
                 if (board[index] == 0){
                     board[index] = this.state.playerTurn;
                     break
@@ -78,16 +83,16 @@
             const board = this.state.board;
             const lastPlayer = this.state.lastPlayer;
             const lastMoveIndex = this.state.lastMoveIndex;
-            const lastMoveRow = Math.floor(lastMoveIndex / this.width);
-            const lastMoveCol = lastMoveIndex % this.width;
+            const lastMoveRow = Math.floor(lastMoveIndex / this.state.width);
+            const lastMoveCol = lastMoveIndex % this.state.width;
 
             //check for horizontal connect 4
             let startCol = Math.max(0, lastMoveCol - 3);
-            let endCol = Math.min(this.width - 1, lastMoveCol + 3);
+            let endCol = Math.min(this.state.width - 1, lastMoveCol + 3);
 
             let count = 0;
             for (let col = startCol; col <= endCol; col++){
-                const index = this.width * lastMoveRow + col;
+                const index = this.state.width * lastMoveRow + col;
                 if (board[index] === lastPlayer){
                     count += 1;
                 } else {
@@ -102,11 +107,11 @@
 
             //check for vertical connect 4
             let startRow = Math.max(0, lastMoveRow - 3);
-            let endRow = Math.min(this.width - 1, lastMoveRow + 3);
+            let endRow = Math.min(this.state.width - 1, lastMoveRow + 3);
 
             count = 0;
             for (let row = startRow; row <= endRow; row++){
-                const index = this.width * row + lastMoveCol;
+                const index = this.state.width * row + lastMoveCol;
                 if (board[index] === lastPlayer){
                     count += 1;
                 } else {
@@ -128,8 +133,8 @@
 
             for (let i = 0; i < 7; i++){
                 if (row < 0 || col < 0) {continue}
-                if (row >= this.height || col >= this.width) {continue}
-                const index = this.width * row + col;
+                if (row >= this.state.height || col >= this.state.width) {continue}
+                const index = this.state.width * row + col;
                 if (board[index] === lastPlayer){
                     count += 1;
                 } else {
@@ -153,8 +158,8 @@
 
             for (let i = 0; i < 7; i++){
                 if (row < 0 || col < 0) {continue}
-                if (row >= this.height || col >= this.width) {continue}
-                const index = this.width * row + col;
+                if (row >= this.state.height || col >= this.state.width) {continue}
+                const index = this.state.width * row + col;
                 if (board[index] === lastPlayer){
                     count += 1;
                 } else {
@@ -168,7 +173,7 @@
                 row -= 1;
                 col += 1;
             }
-            if (this.state.moves == this.width * this.height){
+            if (this.state.moves == this.state.width * this.state.height){
                 this.state.gameOver = true;
                 return true
             } 
@@ -189,7 +194,7 @@
                     chars.push(board[i].toString());
                 }
                 chars.push(" ");
-                if (i % this.width == this.width - 1){
+                if (i % this.state.width == this.state.width - 1){
                     chars.push("\n");
                 }
             }

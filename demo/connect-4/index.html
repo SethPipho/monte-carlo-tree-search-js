@@ -46,11 +46,11 @@
 <body>
   <div id="app">
     <div class="board">
-      <div class="board-column" v-for="i in 7" v-on:click="move(i - 1)">
-        <div v-for="j in 6">
-            <div v-if="gameState.board[(j-1)*7+(i-1)] == 1" class="board-spot player-1"></div>
-            <div v-if="gameState.board[(j-1)*7+(i-1)] == 2" class="board-spot player-2"></div>
-            <div v-if="gameState.board[(j-1)*7+(i-1)] == 0" class="board-spot"></div>
+      <div class="board-column" v-for="i in gameState.width" v-on:click="move(i - 1)">
+        <div v-for="j in gameState.height">
+            <div v-if="gameState.board[(j-1)*gameState.width+(i-1)] == 1" class="board-spot player-1"></div>
+            <div v-if="gameState.board[(j-1)*gameState.width+(i-1)] == 2" class="board-spot player-2"></div>
+            <div v-if="gameState.board[(j-1)*gameState.width+(i-1)] == 0" class="board-spot"></div>
         </div>
       </div>
     </div>
@@ -95,7 +95,7 @@
               this.humanPlayerNumber = 2
               this.AIPlayerNumber = 1
             }
-            game = new Games.Connect4()
+            game = new Games.Connect4(10,10)
             AI = new MCTS.MCTS(game, this.AIPlayerNumber, 1000)
 
             if (this.AIPlayerNumber == 1){
