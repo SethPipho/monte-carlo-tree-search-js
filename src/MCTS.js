@@ -14,8 +14,15 @@ class MCTS {
     constructor(game, player, iterations, exploration){
         this.game = game
         this.player = player
-        this.iterations = iterations | 500
-        this.exploration = exploration | 1.41
+        this.iterations = iterations
+        this.exploration = exploration
+
+        if (this.iterations == undefined){
+            this.iterations = 500
+        }
+        if (this.exploration == undefined){
+            this.exploration = 1.41
+        }
     }
 
     selectMove(){

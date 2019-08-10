@@ -35,9 +35,6 @@ class TicTacToe {
         }
     }
 
-    playerTurn(){
-        return this.state.playerTurn
-    } 
     moves(){
         let moves = []
         let board = this.state.board
