@@ -17,7 +17,7 @@ console.log("Connect 4")
 for (let i = 0; i < num_games; i++){
     console.log(i)
     
-    let game = new Games.Connect4()
+    let game = new Games.ConnectN(7,6,4)
     let players;
     
     //randomize who goes first
@@ -27,7 +27,7 @@ for (let i = 0; i < num_games; i++){
         players = [new MCTS(game, 1, mctsIters), new Games.RandomAI(game)]
     }
 
-    players = [new MCTS(game, 1, mctsIters), new MCTS(game, 2, mctsIters)]
+    
 
     while (!game.gameOver()){
         const player = players[game.playerTurn() - 1]

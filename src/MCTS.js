@@ -1,5 +1,4 @@
 
-
 class MCTSNode {
     constructor(moves, parent){
         this.parent = parent
@@ -15,7 +14,7 @@ class MCTS {
     constructor(game, player, iterations, exploration){
         this.game = game
         this.player = player
-        this.iterations = iterations | 100
+        this.iterations = iterations | 500
         this.exploration = exploration | 1.41
     }
 
@@ -37,8 +36,8 @@ class MCTS {
             }
             let expandedNode = this.expandNode(selectedNode)
             let winner = this.rollout(expandedNode)
+            
             let value;
-           
             this.backprop(expandedNode, winner)
         }
 

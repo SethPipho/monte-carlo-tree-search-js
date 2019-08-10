@@ -44,6 +44,9 @@
 </head>
 
 <body>
+  <h3>Connect-N</h3>
+  A generalized connect-4 game vs. an AI powered by Monte-Carlo-Tree Search
+  <br><br>
   <div id="app">
     <div class="board">
       <div class="board-column" v-for="i in gameState.width" v-on:click="move(i - 1)">
@@ -71,17 +74,17 @@
     
     <button v-on:click="newGame()">New Game</button>
     <br><br>
-    Board Width: <input type="number" v-model="boardWidth"> <br> <br>
-    Board Height: <input type="number" v-model="boardHeight"> <br> <br>
-    MCTS Iters: <input type="number" v-model="mctsIters"> <br>
+    <input type="number" v-model="boardWidth"> - Board Width <br> <br>
+    <input type="number" v-model="boardHeight"> -  Board Height <br> <br>
+    <input type="number" v-model="n"> - Number to connect <br> <br>
+    <input type="number" v-model="mctsIters"> - MCTS Iters <br>
   </div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="../../dist/mcts-js.build.js"></script>
   <script src="../../dist/games.build.js"></script>
   <script>
-      let game = new Games.Connect4();
+      let game = new Games.ConnectN(7,6,4);
       let AI;
 
       let app = new Vue({
@@ -92,6 +95,7 @@
           AIPlayerNumber: -1,
           boardWidth:7,
           boardHeight:6,
+          n:4,
           mctsIters:1000
         },
         methods: {
@@ -103,11 +107,12 @@
               this.humanPlayerNumber = 2
               this.AIPlayerNumber = 1
             }
-            game = new Games.Connect4(this.boardWidth, this.boardHeight)
+            game = new Games.ConnectN(parseInt(this.boardWidth), parseInt(this.boardHeight), parseInt(this.n))
             AI = new MCTS.MCTS(game, this.AIPlayerNumber, this.mctsIters)
 
             if (this.AIPlayerNumber == 1){
               this.AIMove()
+              game.gameOver()
             }
             this.gameState = game.cloneState()
           },

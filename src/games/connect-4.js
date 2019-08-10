@@ -1,13 +1,11 @@
-export class Connect4 {
-    constructor(width, height){
-
-        let _width = width | 7
-        let _height = height | 6
+export class ConnectN {
+    constructor(width, height, n){
         
         this.state = {
-            width: _width,
-            height: _height,
-            board: new Array(_width * _height).fill(0),
+            n: n,
+            width: width,
+            height: height,
+            board: new Array(width * height).fill(0),
             playerTurn: 1,
             gameOver: false,
             winner: -1,
@@ -26,6 +24,7 @@ export class Connect4 {
 
     cloneState(){
         return  {
+            n: this.state.n,
             width:this.state.width,
             height: this.state.height,
             board: this.state.board.slice(0),
@@ -71,18 +70,23 @@ export class Connect4 {
 
 
     gameOver(){
-        if (this.state.moves < 7){
+        if (this.state.moves < this.state.n * 2 - 1){
             return false
         }
+        if (this.state.gameOver){
+            return true
+        }
+
         const board = this.state.board
         const lastPlayer = this.state.lastPlayer
         const lastMoveIndex = this.state.lastMoveIndex
         const lastMoveRow = Math.floor(lastMoveIndex / this.state.width)
         const lastMoveCol = lastMoveIndex % this.state.width
+        const n = this.state.n
 
         //check for horizontal connect 4
-        let startCol = Math.max(0, lastMoveCol - 3)
-        let endCol = Math.min(this.state.width - 1, lastMoveCol + 3)
+        let startCol = Math.max(0, lastMoveCol - (n - 1))
+        let endCol = Math.min(this.state.width - 1, lastMoveCol + (n - 1))
 
         let count = 0
         for (let col = startCol; col <= endCol; col++){
@@ -92,7 +96,7 @@ export class Connect4 {
             } else {
                 count = 0
             }
-            if (count === 4){
+            if (count == n){
                 this.state.winner = lastPlayer
                 this.state.gameOver = true
                 return true
@@ -100,8 +104,8 @@ export class Connect4 {
         }
 
         //check for vertical connect 4
-        let startRow = Math.max(0, lastMoveRow - 3)
-        let endRow = Math.min(this.state.width - 1, lastMoveRow + 3)
+        let startRow = Math.max(0, lastMoveRow - (n - 1))
+        let endRow = Math.min(this.state.width - 1, lastMoveRow + (n - 1))
 
         count = 0
         for (let row = startRow; row <= endRow; row++){
@@ -111,7 +115,7 @@ export class Connect4 {
             } else {
                 count = 0
             }
-            if (count === 4){
+            if (count == n){
                 this.state.winner = lastPlayer
                 this.state.gameOver = true
                 return true
@@ -120,12 +124,12 @@ export class Connect4 {
 
 
         //check for diagonal connect 4, top left to bottom right
-        let row = lastMoveRow - 3
-        let col = lastMoveCol - 3
+        let row = lastMoveRow - (n - 1)
+        let col = lastMoveCol - (n - 1)
 
         count = 0
 
-        for (let i = 0; i < 7; i++){
+        for (let i = 0; i < n * 2 - 1; i++){
             if (row < 0 || col < 0) {continue}
             if (row >= this.state.height || col >= this.state.width) {continue}
             const index = this.state.width * row + col
@@ -134,7 +138,7 @@ export class Connect4 {
             } else {
                 count = 0
             }
-            if (count === 4){
+            if (count == n){
                 this.state.winner = lastPlayer
                 this.state.gameOver = true
                 return true
@@ -145,12 +149,12 @@ export class Connect4 {
 
 
         //check for diagonal connect 4, bottom left to top right
-        row = lastMoveRow + 3
-        col = lastMoveCol - 3
+        row = lastMoveRow + (n - 1)
+        col = lastMoveCol - (n - 1)
 
         count = 0
 
-        for (let i = 0; i < 7; i++){
+        for (let i = 0; i < n * 2 - 1; i++){
             if (row < 0 || col < 0) {continue}
             if (row >= this.state.height || col >= this.state.width) {continue}
             const index = this.state.width * row + col
@@ -159,7 +163,7 @@ export class Connect4 {
             } else {
                 count = 0
             }
-            if (count === 4){
+            if (count == n){
                 this.state.winner = lastPlayer
                 this.state.gameOver = true
                 return true
