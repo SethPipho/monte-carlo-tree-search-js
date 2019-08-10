@@ -68,7 +68,12 @@
     <div v-if="AIPlayerNumber == 2">  <div style="display:inline-block; margin: 0px" class="board-spot player-2"></div> - AI </div>
 
     <br>
+    
     <button v-on:click="newGame()">New Game</button>
+    <br><br>
+    Board Width: <input type="number" v-model="boardWidth"> <br> <br>
+    Board Height: <input type="number" v-model="boardHeight"> <br> <br>
+    MCTS Iters: <input type="number" v-model="mctsIters"> <br>
   </div>
 
 
@@ -85,6 +90,9 @@
           gameState: game.cloneState(),
           humanPlayerNumber: -1,
           AIPlayerNumber: -1,
+          boardWidth:7,
+          boardHeight:6,
+          mctsIters:1000
         },
         methods: {
           newGame: function(){
@@ -95,8 +103,8 @@
               this.humanPlayerNumber = 2
               this.AIPlayerNumber = 1
             }
-            game = new Games.Connect4(10,10)
-            AI = new MCTS.MCTS(game, this.AIPlayerNumber, 1000)
+            game = new Games.Connect4(this.boardWidth, this.boardHeight)
+            AI = new MCTS.MCTS(game, this.AIPlayerNumber, this.mctsIters)
 
             if (this.AIPlayerNumber == 1){
               this.AIMove()
