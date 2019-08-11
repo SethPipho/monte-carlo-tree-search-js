@@ -11,7 +11,7 @@ let draws = 0
 let mctsWins = 0
 let randomWins = 0
 let num_games = 100
-let mctsIters = 500
+let mctsIters = 100
 
 console.log("Connect 4")
 for (let i = 0; i < num_games; i++){

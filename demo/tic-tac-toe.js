@@ -110,12 +110,11 @@ if (Math.random() < .5){
 
 
 while (!game.gameOver()){
-    const player = players[game.playerTurn() - 1]
+    const player = players[game.state.playerTurn - 1]
     const choice = player.selectMove()
     game.playMove(choice)
     console.log(game.toString())
 }
-
 if (game.winner() == -1){
     console.log("Draw!")
 } else if (players[game.winner() - 1] instanceof RandomAI){

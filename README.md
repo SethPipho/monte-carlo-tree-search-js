@@ -9,14 +9,12 @@ In it's most basic form, MCTS can effectivly play any discrete, deterministic, p
 
 ### Usage
 
-Using monte-carlo-tree-search-js is simple. 
 
-First, implement a game. To do this, encapsulate the game logic into a class that implements several basic methods:
-
-See ["demo/tic-tac-toe.js"](https://github.com/SethPipho/monte-carlo-tree-search-js/blob/master/demo/tic-tac-toe.js) for a simple example.
-
-Also see ["demo/connect-4"](https://github.com/SethPipho/monte-carlo-tree-search-js/blob/master/demo/connect-4/index.html)
+See ["demo/tic-tac-toe.js"](https://github.com/SethPipho/monte-carlo-tree-search-js/blob/master/demo/tic-tac-toe.js) for a simple example. Also see ["demo/connect-4"](https://github.com/SethPipho/monte-carlo-tree-search-js/blob/master/demo/connect-4/index.html)
 and ["src/games/connect-4.js"](https://github.com/SethPipho/monte-carlo-tree-search-js/blob/master/src/games/connect-4.js) for source of online demo.
+
+Using monte-carlo-tree-search-js is simple. First, implement a game. To do this, encapsulate the game logic into a class that implements several basic methods:
+
 
 
 ```javascript
@@ -27,13 +25,13 @@ class Connect4Game {
         this.state = {...}
     }
 
-    getState(){/*returns a single object containg's game state*/}
+    getState(){/*returns a single object representing game state*/}
     setState(state){/* set game internal state */}
     cloneState(){/* returns a DEEP copy of game state */}
 
     moves(){/* returns list of valid moves given current game state*/}
     playMove(move){/* play a move, move being an element from .moves() list */}
-    gameOver(){/* True if game is over, false otherwise */}
+    gameOver(){/* true if game is over, false otherwise */}
     winner(){/* number of winning player, -1 if draw" */}
 }
 
@@ -49,8 +47,8 @@ Basic AI vs AI action
 
 let game = new Connect4Game()
 
-let iterations = 1000 //more iterations = means stronger AI, more computation
-let exploration = 1.41 //exploration vs. explotation parameter, sqrt(2) is reasonable default
+let iterations = 1000 //more iterations -> stronger AI, more computation
+let exploration = 1.41 //exploration vs. explotation parameter, sqrt(2) is reasonable default (c constant in UBC forumula)
 
 let player1 = new MCTS(game, 1 , iterations, exploration)
 let player2 = new MCTS(game, 2 , iterations, exploration)
@@ -70,6 +68,7 @@ while (true){
 console.log(game.winner())
 
 ~~~
+
 
 
 

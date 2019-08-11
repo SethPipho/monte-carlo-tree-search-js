@@ -36,18 +36,23 @@ class MCTS {
             this.game.setState(clonedState)
             
             let selectedNode = this.selectNode(root)
+            //if selected node is terminal and we lost, make sure we never choose that move
             if (this.game.gameOver()){
                 if (this.game.winner() != this.player && this.game.winner() != -1){
                     selectedNode.parent.wins = Number.MIN_SAFE_INTEGER
                 }
             }
             let expandedNode = this.expandNode(selectedNode)
-            let winner = this.rollout(expandedNode)
+            this.playout(expandedNode)
             
-            let value;
-            this.backprop(expandedNode, winner)
+            let reward;
+            if (this.game.winner() == -1)               {reward = 0 }
+            else if (this.game.winner() == this.player) {reward = 1 }
+            else                                        {reward = -1}
+            this.backprop(expandedNode, reward)
         }
 
+        //choose move with most wins
         let maxWins = -Infinity
         let maxIndex = -1
         for (let i in root.children){
@@ -59,11 +64,6 @@ class MCTS {
             }
         }
 
-        /* for (let i in root.children){
-            const child = root.children[i]
-            console.log(child.play, child.node.wins, child.node.visits)
-        }
- */
         this.game.setState(originalState)
         return possibleMoves[maxIndex]
     }
@@ -112,7 +112,7 @@ class MCTS {
         return newNode
     }
 
-    rollout(node){
+    playout(node){
         while (!this.game.gameOver()){
             const moves = this.game.moves()
             const randomChoice = Math.floor(Math.random() * moves.length)
@@ -120,16 +120,10 @@ class MCTS {
         }
         return this.game.winner()
     }
-    backprop(node, winner){  
+    backprop(node, reward){  
         while (node != null){
             node.visits += 1
-            if (winner == -1){
-                node.wins += 0 //draw
-            }else if (winner == this.player){
-                node.wins += 1
-            } else {
-                node.wins -= 1
-            } 
+            node.wins += reward 
             node = node.parent
         }
     }
